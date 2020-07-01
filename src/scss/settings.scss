@@ -1,0 +1,36 @@
+$btn-color: white;
+$btn-color-hover: #6868ec;
+
+.btn-settings {
+    min-height: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.settings {
+    margin-top: 1em;
+}
+
+.btn-reset {
+    background: none;
+    outline: none;
+    border: none;
+}
+
+.btn {
+    color: $btn-color;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    cursor: pointer;
+    font-family: sans-serif;
+    padding: 0.5em 0.7em;
+    transition: 0.5s;
+}
+
+.btn + .btn {
+    margin-left: 1em;
+}
+
+.btn:hover {
+    background-color: $btn-color-hover;
+}
