@@ -7,7 +7,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const isProd = process.env.NODE_ENV == 'production';
 const isDev = !isProd;
 
-const filename = extension => isDev ? `bundle.${extension}` : `bundle.[hash].${extension}`;
+const filename = (extension) =>
+    isDev ? `bundle.${extension}` : `bundle.[hash].${extension}`;
 
 module.exports = {
     context: path.resolve(__dirname, 'src'),
@@ -66,7 +67,12 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
+                use: [{loader: 'style-loader'}, {loader: 'css-loader'}]
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'eslint-loader'
             }
         ]
     }
