@@ -21,7 +21,8 @@ module.exports = {
     resolve: {
         extensions: ['.js'],
         alias: {
-            '@': path.resolve(__dirname, 'src')
+            '@': path.resolve(__dirname, 'src'),
+            '@assets': path.resolve(__dirname, 'src/assets')
         }
     },
     devServer: {
@@ -42,6 +43,10 @@ module.exports = {
                 {
                     from: path.resolve(__dirname, './src/favicon.ico'),
                     to: path.resolve(__dirname, './dist')
+                },
+                {
+                    from: path.resolve(__dirname, './src/assets'),
+                    to: path.resolve(__dirname, 'dist')
                 }
             ]
         }),

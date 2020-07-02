@@ -11,5 +11,8 @@
         "comma-dangle": "off",
         "operator-linebreak": "off",
         "indent": ["error", 4]
+    },
+    "parserOptions": {
+        "sourceType": "module"
     }
 }
