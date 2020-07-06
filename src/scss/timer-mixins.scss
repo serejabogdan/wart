@@ -1,0 +1,18 @@
+@mixin timer__btn-style {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.6rem 1rem;
+    transition: 0.4s;
+    opacity: $buttons-opacity-min;
+
+    img {
+        width: $buttons-size;
+    }
+
+    &:hover {
+        background-color: $btn-color-hover;
+        opacity: $buttons-opacity-max;
+    }
+}

@@ -7,7 +7,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const isProd = process.env.NODE_ENV == 'production';
 const isDev = !isProd;
 
-const filename = extension => isDev ? `bundle.${extension}` : `bundle.[hash].${extension}`;
+const filename = (extension) =>
+    isDev ? `bundle.${extension}` : `bundle.[hash].${extension}`;
 
 module.exports = {
     context: path.resolve(__dirname, 'src'),
@@ -20,7 +21,8 @@ module.exports = {
     resolve: {
         extensions: ['.js'],
         alias: {
-            '@': path.resolve(__dirname, 'src')
+            '@': path.resolve(__dirname, 'src'),
+            '@assets': path.resolve(__dirname, 'src/assets')
         }
     },
     devServer: {
@@ -41,6 +43,10 @@ module.exports = {
                 {
                     from: path.resolve(__dirname, './src/favicon.ico'),
                     to: path.resolve(__dirname, './dist')
+                },
+                {
+                    from: path.resolve(__dirname, './src/assets'),
+                    to: path.resolve(__dirname, 'dist')
                 }
             ]
         }),
@@ -63,6 +69,15 @@ module.exports = {
                     'css-loader',
                     'sass-loader'
                 ]
+            },
+            {
+                test: /\.css$/,
+                use: [{loader: 'style-loader'}, {loader: 'css-loader'}]
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'eslint-loader'
             }
         ]
     }

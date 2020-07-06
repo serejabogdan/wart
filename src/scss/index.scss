@@ -1,5 +1,20 @@
-$red: red;
+$bg: #8887ff;
 
 body {
-    background-color: $red;
+    background-color: $bg;
+}
+
+.wrapper {
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 auto;
 }

@@ -1,0 +1,75 @@
+@import 'timer-mixins.scss';
+@import 'timer-variables.scss';
+
+.timer__clock {
+    color: $timer_color;
+    font-family: sans-serif;
+}
+
+.timer__buttons {
+    min-height: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+}
+
+.timer__btn-reset, .settings__btn-reset {
+    background: none;
+    outline: none;
+    border: none;
+}
+
+.timer__btn {
+    @include timer__btn-style;
+
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.settings {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.settings__btn {
+    @include timer__btn-style;
+}
+
+$screen-sm: 576px;
+$screen-md: 768px;
+$screen-lg: 992px;
+$screen-xl: 1200px;
+
+$screen-sm-max: 767px;
+$screen-md-max: 991px;
+$screen-lg-max: 1199px;
+
+@media (max-width: $screen-sm-max) {
+    .timer__clock {
+        font-size: $base * 25px;
+    }
+}
+
+@media (min-width: $screen-sm) {
+    .timer__clock {
+        font-size: $base * 20px;
+    }
+}
+
+@media (min-width: $screen-md) {
+    .timer__clock {
+        font-size: $base * 30px;
+    }
+}
+
+@media (min-width: $screen-lg) {
+    .timer__clock {
+        font-size: $base * 35px;
+    }
+}
+
+@media (min-width: $screen-xl) {
+    .timer__clock {
+        font-size: $base * 40px;
+    }
+}
