@@ -22,7 +22,7 @@ module.exports = {
         extensions: ['.js'],
         alias: {
             '@': path.resolve(__dirname, 'src'),
-            '@assets': path.resolve(__dirname, 'src/assets')
+            '@core': path.resolve(__dirname, 'src/core')
         }
     },
     devServer: {

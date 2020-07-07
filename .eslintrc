@@ -10,7 +10,8 @@
         "arrow-parens": "off",
         "comma-dangle": "off",
         "operator-linebreak": "off",
-        "indent": ["error", 4]
+        "indent": ["error", 4],
+        "require-jsdoc": "off"
     },
     "parserOptions": {
         "sourceType": "module"
