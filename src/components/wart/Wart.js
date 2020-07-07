@@ -1,17 +1,18 @@
+import {$} from '@core/dom';
+
 export class Wart {
     constructor(selector, options) {
-        this.$app = document.querySelector(selector);
+        this.$app = $(selector);
         this.components = options.components || [];
     }
 
     getRoot() {
-        const $root = document.createElement('div');
-        $root.classList.add('wrapper');
+        const $root = $.create('div', 'wrapper');
         this.components.forEach((Component) => {
             const component = new Component();
-            $root.insertAdjacentHTML('beforeend', component.toHTML());
+            $root.html(component.toHTML());
         });
-        return $root;
+        return $root.$selector;
     }
 
     render() {
