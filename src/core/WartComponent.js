@@ -1,6 +1,6 @@
 import {DomListener} from '@core/Domlistener';
 
-export class TimerComponent extends DomListener {
+export class WartComponent extends DomListener {
     toHTML() {
         return '';
     }
