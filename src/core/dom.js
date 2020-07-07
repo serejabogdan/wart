@@ -30,6 +30,14 @@ class Dom {
 
         return this;
     }
+
+    on(eventType, callback) {
+        this.$selector.addEventListener(eventType, callback);
+    }
+
+    off(eventType, callback) {
+        this.$selector.removeEventListener(eventType, callback);
+    }
 }
 
 export function $(selector) {

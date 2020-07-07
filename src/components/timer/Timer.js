@@ -1,15 +1,14 @@
 import {WartComponent} from '@core/WartComponent';
-import {ControlPanel} from '../controlPanel/ControlPanel';
+import {controlPanel} from '../controlPanel/ControlPanel';
 
 export class Timer extends WartComponent {
     toHTML() {
         return `
-            <div class="content">
-                <div class="timer">
-                    <div class="timer__clock">00:00</div>
-                    ${new ControlPanel().toHTML()}
-                </div>
+            <div class="timer">
+                <div class="timer__clock">00:00</div>
+                ${controlPanel()}
             </div>
         `;
     }
 }
+Timer.className = 'content';
