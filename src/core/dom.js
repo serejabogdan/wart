@@ -6,6 +6,14 @@ class Dom {
                 : selector;
     }
 
+    set change(text) {
+        this.$selector.innerHTML = text;
+    }
+
+    get selector() {
+        return this.$selector;
+    }
+
     html(html) {
         if (typeof html == 'string') {
             this.$selector.insertAdjacentHTML('beforeend', html);

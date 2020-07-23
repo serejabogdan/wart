@@ -12,7 +12,8 @@
         "operator-linebreak": "off",
         "indent":"off",
         "require-jsdoc": "off",
-        "no-debugger": "off"
+        "no-debugger": "off",
+        "max-len": ["error", { "code": 880 }]
     },
     "parserOptions": {
         "sourceType": "module"
