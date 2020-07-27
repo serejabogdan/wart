@@ -46,6 +46,14 @@ class Dom {
     off(eventType, callback) {
         this.$selector.removeEventListener(eventType, callback);
     }
+
+    addClass(className) {
+        this.$selector.classList.add(className);
+    }
+
+    removeClass(className) {
+        this.$selector.classList.remove(className);
+    }
 }
 
 export function $(selector) {

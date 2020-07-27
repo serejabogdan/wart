@@ -1,4 +1,5 @@
 import './scss/index.scss';
+import './scss/settings.modal.scss';
 import './scss/timer.scss';
 import 'normalize.css';
 

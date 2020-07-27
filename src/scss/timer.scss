@@ -37,6 +37,9 @@
 
 .settings__btn {
     @include timer__btn-style;
+    & img {
+        pointer-events: none;
+    }
 }
 
 $screen-sm: 576px;
