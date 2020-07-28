@@ -1,10 +1,11 @@
 import {WartComponent} from '@core/WartComponent';
 import {controlPanel} from '../controlPanel/ControlPanel';
 import {$} from '@core/dom';
+import {Control} from '@core/Control';
 
 export class Timer extends WartComponent {
-    constructor(selector) {
-        super(selector, {
+    constructor($selector) {
+        super($selector, {
             name: 'Timer',
             listeners: ['click']
         });
@@ -12,6 +13,7 @@ export class Timer extends WartComponent {
         this.min = 20;
         this.sec = 0;
         this.pauseStatus = false;
+        this.controls = [];
     }
 
     toHTML() {
@@ -26,16 +28,21 @@ export class Timer extends WartComponent {
     init() {
         super.init();
         this.$timer = $('.timer__clock');
+        this.$timer.change = `${this.minFix()}:${this.secFix()}`;
+        this.controls = [
+            new Control('start', this.start.bind(this)),
+            new Control('pause', this.pause.bind(this)),
+            new Control('stop', this.stop.bind(this))
+        ];
     }
 
     start(min) {
         if (min) {
             this.min = min;
         }
-        if (this.work) {
-            return;
+        if (!this.work) {
+            this.work = setInterval(this.tick.bind(this), 1000);
         }
-        this.work = setInterval(this.tick.bind(this), 1000);
     }
 
     pause() {
@@ -50,9 +57,9 @@ export class Timer extends WartComponent {
     }
 
     stop() {
-        this.min = this.sec = 0;
+        this.min = 20;
+        this.sec = 0;
         this.$timer.change = `${this.minFix()}:${this.secFix()}`;
-
         clearInterval(this.work);
         this.work = null;
     }
@@ -63,12 +70,12 @@ export class Timer extends WartComponent {
             this.work = null;
         }
         if (this.sec == 0) {
-            this.$timer.change = `${this.minFix()}:${this.secFix()}`;
             this.min--;
             this.sec = 59;
-        } else {
             this.$timer.change = `${this.minFix()}:${this.secFix()}`;
+        } else {
             this.sec--;
+            this.$timer.change = `${this.minFix()}:${this.secFix()}`;
         }
     }
 
@@ -81,17 +88,9 @@ export class Timer extends WartComponent {
 
     onClick(e) {
         const typeBtn = e.target.dataset.timer;
-        switch (typeBtn) {
-            case 'start':
-                this.start();
-                break;
-            case 'pause':
-                this.pause();
-                break;
-            case 'stop':
-                this.stop();
-                break;
-        }
+        this.controls
+            .filter(control => control.name == typeBtn)
+            .forEach(control => control.action());
     }
 }
 Timer.className = 'content';

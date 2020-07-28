@@ -4,13 +4,13 @@ import {$} from '@core/dom';
 import {Control} from '@core/Control';
 
 export class Settings extends WartComponent {
-    constructor(selector) {
-        super(selector, {
+    constructor($selector) {
+        super($selector, {
             name: 'Settings',
             listeners: ['click']
         });
         this.controls = [];
-        this.selector = selector;
+        this.$selector = $selector;
     }
 
     toHTML() {
@@ -33,7 +33,7 @@ export class Settings extends WartComponent {
     createModal(options) {
         const $modal = $.create('div', 'wart-modal');
         $modal.html(modalWindow(options));
-        this.selector.append($modal);
+        this.$selector.append($modal);
         return {
             open() {
                 $modal.addClass('open');
