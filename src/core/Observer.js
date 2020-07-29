@@ -1,6 +1,7 @@
 export class Observer {
     constructor() {
         this.listeners = {};
+        this.unsubscribers = [];
     }
 
     emit(event, data) {
@@ -17,5 +18,9 @@ export class Observer {
         return () =>
         this.listeners[event] =
         this.listeners[event].filter(listener => listener != callback);
+    }
+
+    unsubscribe() {
+        this.unsubscribers.forEach(unsubscriber => unsubscriber());
     }
 }

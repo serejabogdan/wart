@@ -9,11 +9,34 @@ export class WartComponent extends DomListener {
         this.name = options.name || '';
         this.observer = new Observer();
         this.store = createStore(rootReducer);
+        this.storeSub;
     }
 
     toHTML() {
         return '';
     }
+
+    /* Observer */
+    $emit(e, ...args) {
+        this.observer.emit(e, ...args);
+    }
+
+    $on(e, callback) {
+        const unsubscriber = this.observer.subscribe(e, callback);
+        this.observer.unsubscribers.push(unsubscriber);
+    }
+    /* Observer */
+
+    /* Store */
+    $dispatch(action) {
+        this.store.dispatch(action);
+    }
+
+    $subscribe(callback) {
+        this.storeSub = this.store.subscribe(callback);
+        // console.log(this.storeSub);
+    }
+    /* Store */
 
     init() {
         this.initDomListeners();
@@ -21,5 +44,7 @@ export class WartComponent extends DomListener {
 
     destroy() {
         this.removeDomListeners();
+        this.observer.unsubscribe();
+        this.storeSub();
     }
 }

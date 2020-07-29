@@ -28,6 +28,7 @@ export class Settings extends WartComponent {
             new Control('settings', this.modal.open),
             new Control('modal-close', this.modal.close)
         ];
+        // this.$subscribe(state => console.log('STATE'));
     }
 
     createModal(options) {
@@ -54,6 +55,7 @@ export class Settings extends WartComponent {
             .forEach((control) => {
                 control.action();
             });
+            // this.$dispatch({type: 'TEST'});
     }
 }
 Settings.className = 'settings';

@@ -34,6 +34,8 @@ export class Timer extends WartComponent {
             new Control('pause', this.pause.bind(this)),
             new Control('stop', this.stop.bind(this))
         ];
+
+        // this.$subscribe(state => console.log('STATE'));
     }
 
     start(min) {
@@ -91,6 +93,8 @@ export class Timer extends WartComponent {
         this.controls
             .filter(control => control.name == typeBtn)
             .forEach(control => control.action());
+
+        // this.$dispatch({type: 'TEST'});
     }
 }
 Timer.className = 'content';
