@@ -3,12 +3,15 @@ import {Observer} from '@core/Observer';
 import {createStore} from '@core/createStore';
 import {rootReducer} from '@core/redux/rootReducer';
 
+
 export class WartComponent extends DomListener {
     constructor($selector, options = {}) {
         super($selector, options.listeners);
         this.name = options.name || '';
         this.observer = new Observer();
-        this.store = createStore(rootReducer);
+        this.store = createStore(rootReducer, {
+            timer: {}
+        });
         this.storeSub;
     }
 
@@ -40,6 +43,7 @@ export class WartComponent extends DomListener {
 
     init() {
         this.initDomListeners();
+        this.store.subscribe(state => console.log(state));
     }
 
     destroy() {

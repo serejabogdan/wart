@@ -75,6 +75,7 @@ export class Timer extends WartComponent {
             this.min--;
             this.sec = 59;
             this.$timer.change = `${this.minFix()}:${this.secFix()}`;
+            this.$dispatch({type: 'AMOUNT_MINUTES', min: this.min});
         } else {
             this.sec--;
             this.$timer.change = `${this.minFix()}:${this.secFix()}`;

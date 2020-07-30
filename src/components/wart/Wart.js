@@ -10,8 +10,7 @@ export class Wart {
         const $root = $.create('div', 'wrapper');
         this.components = this.components.map((Component) => {
             const $div = $.create('div', Component.className);
-            const component = new Component($div, {});
-            console.log(component);
+            const component = new Component($div);
             $div.html(component.toHTML());
             $root.append($div);
             return component;

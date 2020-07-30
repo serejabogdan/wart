@@ -7,6 +7,7 @@ import {Wart} from './components/wart/Wart';
 import {Settings} from './components/settings/Settings';
 import {Timer} from './components/timer/Timer';
 
+
 const wart = new Wart('#app', {
     components: [Settings, Timer]
 });
