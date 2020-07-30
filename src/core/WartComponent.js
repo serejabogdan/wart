@@ -10,9 +10,9 @@ export class WartComponent extends DomListener {
         super($selector, options.listeners);
         this.name = options.name || '';
         this.observer = new Observer();
-        this.store = createStore(rootReducer, {
-            timer: {}
-        });
+        this.store = createStore(rootReducer,
+            storage('wart-time') ? storage('wart-time') : {timer: {min: 30}}
+        );
         this.storeSub;
     }
 
@@ -38,16 +38,14 @@ export class WartComponent extends DomListener {
 
     $subscribe(callback) {
         this.storeSub = this.store.subscribe(callback);
-        // console.log(this.storeSub);
     }
+    /* Store */
 
     $setStorage() {
         this.store.subscribe(state => {
-            console.log(state);
             storage('wart-time', state);
         });
     }
-    /* Store */
 
     init() {
         this.initDomListeners();

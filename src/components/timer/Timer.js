@@ -2,6 +2,9 @@ import {WartComponent} from '@core/WartComponent';
 import {controlPanel} from '../controlPanel/ControlPanel';
 import {$} from '@core/dom';
 import {Control} from '@core/Control';
+import {fixTime} from '@core/utils';
+import * as actions from '@core/redux/actions';
+import {storage} from '@core/utils';
 
 export class Timer extends WartComponent {
     constructor($selector) {
@@ -10,8 +13,7 @@ export class Timer extends WartComponent {
             listeners: ['click']
         });
 
-        this.min = 20;
-        this.sec = 0;
+        this.min = this.sec = 0;
         this.pauseStatus = false;
         this.controls = [];
     }
@@ -27,15 +29,22 @@ export class Timer extends WartComponent {
 
     init() {
         super.init();
-        this.$timer = $('.timer__clock');
-        this.$timer.change = `${this.minFix()}:${this.secFix()}`;
+        this.timerInit();
         this.controls = [
             new Control('start', this.start.bind(this)),
             new Control('pause', this.pause.bind(this)),
             new Control('stop', this.stop.bind(this))
         ];
+    }
 
-        // this.$subscribe(state => console.log('STATE'));
+    timerInit() {
+        /* if (storage('wart-time').timer.min === 0) {
+            storage('wart-time', {timer: {min: 30}})
+        } */
+        this.min = storage('wart-time').timer.min === 0 ? 30 : storage('wart-time').timer.min;
+        this.sec = 0;
+        this.$timer = $('.timer__clock');
+        this.$timer.change = fixTime(this.min, this.sec);
     }
 
     start(min) {
@@ -59,9 +68,7 @@ export class Timer extends WartComponent {
     }
 
     stop() {
-        this.min = 20;
-        this.sec = 0;
-        this.$timer.change = `${this.minFix()}:${this.secFix()}`;
+        this.timerInit();
         clearInterval(this.work);
         this.work = null;
     }
@@ -70,23 +77,21 @@ export class Timer extends WartComponent {
         if (!this.min && !this.sec) {
             clearInterval(this.work);
             this.work = null;
+            return;
         }
         if (this.sec == 0) {
             this.min--;
-            this.sec = 59;
-            this.$timer.change = `${this.minFix()}:${this.secFix()}`;
-            this.$dispatch({type: 'AMOUNT_MINUTES', min: this.min});
+            this.sec = 9;
+            this.$timer.change = fixTime(this.min, this.sec);
+            this.$dispatch(
+                actions.timerMinutes(
+                    {timer: {min: this.min}}
+                )
+            );
         } else {
             this.sec--;
-            this.$timer.change = `${this.minFix()}:${this.secFix()}`;
+            this.$timer.change = fixTime(this.min, this.sec);
         }
-    }
-
-    minFix() {
-        return this.min < 10 ? `0${this.min}` : `${this.min}`;
-    }
-    secFix() {
-        return this.sec < 10 ? `0${this.sec}` : `${this.sec}`;
     }
 
     onClick(e) {
@@ -94,8 +99,6 @@ export class Timer extends WartComponent {
         this.controls
             .filter(control => control.name == typeBtn)
             .forEach(control => control.action());
-
-        // this.$dispatch({type: 'TEST'});
     }
 }
 Timer.className = 'content';

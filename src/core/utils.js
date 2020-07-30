@@ -12,3 +12,15 @@ export function storage(key, data = null) {
     }
     localStorage.setItem(key, JSON.stringify(data));
 }
+
+export function fixTime(min, sec) {
+    return `${fixMinutes(min)}:${fixSeconds(sec)}`;
+}
+
+function fixMinutes(min) {
+    return min < 10 ? `0${min}` : `${min}`;
+}
+
+function fixSeconds(sec) {
+    return sec < 10 ? `0${sec}` : `${sec}`;
+}
