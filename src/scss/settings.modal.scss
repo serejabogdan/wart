@@ -6,8 +6,11 @@
     z-index: 1000;
 }
 
-.wart-modal.open .wart-modal__window {
-    transform: translateY(100%);
+.wart-modal.open .wart-modal__overlay,
+.wart-modal.hide .wart-modal__overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .wart-modal.open .wart-modal__overlay {
@@ -15,7 +18,8 @@
 }
 
 .wart-modal.hide .wart-modal__window {
-    transform: translateY(-100%);
+    transform: translateY(-200%);
+    opacity: 0;
 }
 
 .wart-modal.hide .wart-modal__overlay {
@@ -42,7 +46,7 @@
     border-radius: 0.25rem;
     background: #fff;
     margin: 0 auto;
-    transform: translateY(-100%);
+    opacity: 0;
     transition: transform .3s ease, opacity .3s ease;
 }
 

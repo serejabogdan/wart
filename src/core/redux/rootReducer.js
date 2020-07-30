@@ -3,7 +3,7 @@ export function rootReducer(state, action) {
     console.log(action);
     switch (action.type) {
         case 'AMOUNT_MINUTES':
-            return {state, timer: {min}};
+            return {timer: min};
         default: return {state};
     }
 }
