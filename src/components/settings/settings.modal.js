@@ -15,20 +15,20 @@ export function modalWindow(options) {
                 <div class="wart-modal__body">
                     <div class="wart-modal__work-time">
                         <p>Work time</p>
-                        <input type="text">
+                        <input type="text" data-input="work">
                     </div>
                     <div class="wart-modal__rest-time">
                         <p>Rest time</p>
-                        <input type="text">
+                        <input type="text" data-input="rest">
                     </div>
                     <div class="wart-modal__notification">
                         <p>Notifications</p>
-                        <input type="text">
+                        <input type="text" data-input1="notifications">
                     </div>
                 </div>
                 <div class="wart-modal__footer">
                     <button class="btn btn-primary"
-                    data-btn="modal-close">Ok</button>
+                    data-btn="modal-ok">Ok</button>
                     <button class="btn btn-primary"
                     data-btn="modal-close">Cancel</button>
                 </div>

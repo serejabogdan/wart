@@ -1,7 +1,5 @@
 import {DomListener} from '@core/Domlistener';
 import {Observer} from '@core/Observer';
-import {createStore} from '@core/createStore';
-import {rootReducer} from './redux/rootReducer';
 import {storage} from '@core/utils';
 
 
@@ -10,9 +8,7 @@ export class WartComponent extends DomListener {
         super($selector, options.listeners);
         this.name = options.name || '';
         this.observer = new Observer();
-        this.store = createStore(rootReducer,
-            storage('wart-time') ? storage('wart-time') : {timer: {min: 30}}
-        );
+        this.store = options.store;
         this.storeSub;
     }
 
@@ -41,15 +37,13 @@ export class WartComponent extends DomListener {
     }
     /* Store */
 
-    $setStorage() {
-        this.store.subscribe(state => {
-            storage('wart-time', state);
-        });
-    }
+    /* $setStorage() {
+        
+    } */
 
     init() {
         this.initDomListeners();
-        this.$setStorage();
+        // this.$setStorage();
     }
 
     destroy() {

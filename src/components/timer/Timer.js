@@ -1,97 +1,39 @@
 import {WartComponent} from '@core/WartComponent';
 import {controlPanel} from '../controlPanel/ControlPanel';
-import {$} from '@core/dom';
 import {Control} from '@core/Control';
-import {fixTime} from '@core/utils';
-import * as actions from '@core/redux/actions';
-import {storage} from '@core/utils';
+import {TimerService} from './timer.service';
 
 export class Timer extends WartComponent {
-    constructor($selector) {
+    constructor($selector, options = {}) {
         super($selector, {
             name: 'Timer',
-            listeners: ['click']
+            listeners: ['click'],
+            ...options
         });
-
-        this.min = this.sec = 0;
-        this.pauseStatus = false;
+        this.timer = new TimerService(this.$dispatch.bind(this), options.store);
         this.controls = [];
     }
 
     toHTML() {
         return `
             <div class="timer">
-                <div class="timer__clock" data-timer="timer">00:00</div>
+                <div class="timer__clock" data-timer="timer">
+                    00:00
+                </div>
                 ${controlPanel()}
             </div>
         `;
     }
-
+    
     init() {
         super.init();
-        this.timerInit();
+        this.timer.timerInit();
         this.controls = [
-            new Control('start', this.start.bind(this)),
-            new Control('pause', this.pause.bind(this)),
-            new Control('stop', this.stop.bind(this))
+            new Control('start', this.timer.start.bind(this.timer)),
+            new Control('pause', this.timer.pause.bind(this.timer)),
+            new Control('stop', this.timer.stop.bind(this.timer))
         ];
-    }
-
-    timerInit() {
-        /* if (storage('wart-time').timer.min === 0) {
-            storage('wart-time', {timer: {min: 30}})
-        } */
-        this.min = storage('wart-time').timer.min === 0 ? 30 : storage('wart-time').timer.min;
-        this.sec = 0;
-        this.$timer = $('.timer__clock');
-        this.$timer.change = fixTime(this.min, this.sec);
-    }
-
-    start(min) {
-        if (min) {
-            this.min = min;
-        }
-        if (!this.work) {
-            this.work = setInterval(this.tick.bind(this), 1000);
-        }
-    }
-
-    pause() {
-        if (!this.pauseStatus) {
-            clearInterval(this.work);
-            this.work = null;
-            this.pauseStatus = true;
-        } else {
-            this.start();
-            this.pauseStatus = false;
-        }
-    }
-
-    stop() {
-        this.timerInit();
-        clearInterval(this.work);
-        this.work = null;
-    }
-
-    tick() {
-        if (!this.min && !this.sec) {
-            clearInterval(this.work);
-            this.work = null;
-            return;
-        }
-        if (this.sec == 0) {
-            this.min--;
-            this.sec = 9;
-            this.$timer.change = fixTime(this.min, this.sec);
-            this.$dispatch(
-                actions.timerMinutes(
-                    {timer: {min: this.min}}
-                )
-            );
-        } else {
-            this.sec--;
-            this.$timer.change = fixTime(this.min, this.sec);
-        }
+        this.$subscribe(state => console.log(state));
     }
 
     onClick(e) {

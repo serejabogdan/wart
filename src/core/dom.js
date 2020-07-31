@@ -54,6 +54,10 @@ class Dom {
     removeClass(className) {
         this.$selector.classList.remove(className);
     }
+
+    findAll(selector) {
+        return this.$selector.querySelectorAll(selector);
+    }
 }
 
 export function $(selector) {

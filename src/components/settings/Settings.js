@@ -2,12 +2,14 @@ import {WartComponent} from '@core/WartComponent';
 import {modalWindow} from './settings.modal';
 import {$} from '@core/dom';
 import {Control} from '@core/Control';
+import {timerData} from '@core/redux/actions';
 
 export class Settings extends WartComponent {
-    constructor($selector) {
+    constructor($selector, options = {}) {
         super($selector, {
             name: 'Settings',
-            listeners: ['click']
+            listeners: ['click'],
+            ...options
         });
         this.controls = [];
         this.$selector = $selector;
@@ -26,18 +28,28 @@ export class Settings extends WartComponent {
         this.modal = this.createModal({title: 'Settings'});
         this.controls = [
             new Control('settings', this.modal.open),
-            new Control('modal-close', this.modal.close)
+            new Control('modal-close', this.modal.close),
+            new Control('modal-ok', this.modal.ok)
         ];
-        // this.$subscribe(state => console.log('STATE'));
     }
 
     createModal(options) {
         const $modal = $.create('div', 'wart-modal');
         $modal.html(modalWindow(options));
         this.$selector.append($modal);
+        const that = this;
         return {
             open() {
                 $modal.addClass('open');
+            },
+            ok() {
+                const controls = $('.wart-modal__body').findAll('[data-input]');
+                const timer = {};
+                for(let control of controls) {
+                    timer[control.dataset.input] = +control.value;
+                }
+                
+                that.$dispatch(timerData(timer));
             },
             close() {
                 $modal.removeClass('open');
@@ -51,11 +63,10 @@ export class Settings extends WartComponent {
     onClick(e) {
         const typeBtn = e.target.dataset.btn;
         this.controls
-            .filter((control) => control.name == typeBtn)
+            .filter((control) => control.name === typeBtn)
             .forEach((control) => {
                 control.action();
             });
-            // this.$dispatch({type: 'TEST'});
     }
 }
 Settings.className = 'settings';

@@ -6,7 +6,7 @@ export function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function storage(key, data = null) {
+export function storage(key = 'wart-state', data = null) {
     if (!data) {
         return JSON.parse(localStorage.getItem(key));
     }
@@ -23,4 +23,8 @@ function fixMinutes(min) {
 
 function fixSeconds(sec) {
     return sec < 10 ? `0${sec}` : `${sec}`;
+}
+
+export function setTime($timer, min, sec) {
+    $timer.change = fixTime(min, sec);
 }
