@@ -55,6 +55,14 @@ class Dom {
         this.$selector.classList.remove(className);
     }
 
+    set imgPath(path) {
+        this.$selector.src = path;
+    }
+
+    find(selector) {
+        return $(this.$selector.querySelector(selector));
+    }
+
     findAll(selector) {
         return this.$selector.querySelectorAll(selector);
     }

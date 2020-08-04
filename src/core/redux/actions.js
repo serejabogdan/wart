@@ -1,4 +1,8 @@
-import {AMOUNT_MINUTES, TIMER} from './type';
+import {
+    AMOUNT_MINUTES,
+    TIMER_TIME,
+    TIMER_MODE
+} from './type';
 
 export function timerMinutes(data) {
     return {
@@ -7,9 +11,16 @@ export function timerMinutes(data) {
     }
 }
 
-export function timerData(data) {
+export function timerTime(data) {
     return {
-        type: TIMER,
+        type: TIMER_TIME,
+        timer: data
+    }
+}
+
+export function timerMode(data) {
+    return {
+        type: TIMER_MODE,
         timer: data
     }
 }

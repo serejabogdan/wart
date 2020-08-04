@@ -10,7 +10,7 @@ export class Timer extends WartComponent {
             listeners: ['click'],
             ...options
         });
-        this.timer = new TimerService(this.$dispatch.bind(this), options.store);
+        this.timer = new TimerService(options.store);
         this.controls = [];
     }
 
@@ -29,11 +29,8 @@ export class Timer extends WartComponent {
         super.init();
         this.timer.timerInit();
         this.controls = [
-            new Control('start', this.timer.start.bind(this.timer)),
-            new Control('pause', this.timer.pause.bind(this.timer)),
-            new Control('stop', this.timer.stop.bind(this.timer))
+            new Control('update', this.timer.update.bind(this.timer))
         ];
-        this.$subscribe(state => console.log(state));
     }
 
     onClick(e) {

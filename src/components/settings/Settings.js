@@ -2,7 +2,7 @@ import {WartComponent} from '@core/WartComponent';
 import {modalWindow} from './settings.modal';
 import {$} from '@core/dom';
 import {Control} from '@core/Control';
-import {timerData} from '@core/redux/actions';
+import {timerTime, timerMode} from '@core/redux/actions';
 
 export class Settings extends WartComponent {
     constructor($selector, options = {}) {
@@ -25,19 +25,18 @@ export class Settings extends WartComponent {
 
     init() {
         super.init();
-        this.modal = this.createModal({title: 'Settings'});
+        this.modal = this.createModal(this.$dispatch.bind(this), {title: 'Settings'});
         this.controls = [
-            new Control('settings', this.modal.open),
-            new Control('modal-close', this.modal.close),
-            new Control('modal-ok', this.modal.ok)
+            new Control('settings', this.modal.open.bind(this.modal)),
+            new Control('modal-close', this.modal.close.bind(this.modal)),
+            new Control('modal-ok', this.modal.ok.bind(this.modal))
         ];
     }
 
-    createModal(options) {
+    createModal($dispatch, options) {
         const $modal = $.create('div', 'wart-modal');
         $modal.html(modalWindow(options));
         this.$selector.append($modal);
-        const that = this;
         return {
             open() {
                 $modal.addClass('open');
@@ -48,8 +47,9 @@ export class Settings extends WartComponent {
                 for(let control of controls) {
                     timer[control.dataset.input] = +control.value;
                 }
-                
-                that.$dispatch(timerData(timer));
+                $dispatch(timerTime(timer));
+                $dispatch(timerMode({mode: true}));
+                this.close();
             },
             close() {
                 $modal.removeClass('open');

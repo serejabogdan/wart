@@ -1,6 +1,5 @@
 import {DomListener} from '@core/Domlistener';
 import {Observer} from '@core/Observer';
-import {storage} from '@core/utils';
 
 
 export class WartComponent extends DomListener {

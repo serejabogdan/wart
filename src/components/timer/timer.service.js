@@ -1,66 +1,82 @@
 import {$} from '@core/dom';
-import {timerMinutes} from '@core/redux/actions';
-import {storage} from '@core/utils';
-import {setTime} from '@core/utils';
+import {timerTime, timerMode} from '@core/redux/actions';
+import {$setContext} from '@core/utils';
 
 export class TimerService {
-    constructor($dispatch, store) {
-        this.min = this.sec = 0;
-        this.pauseStatus = false;
-        this.$dispatch = $dispatch;
+    constructor(store) {
+        this.minutes = this.seconds = 0;
         this.store = store;
+        this.timer = this.store.getState().timer;
     }
     
     timerInit() {
-        this.min = this.store.getState().timer.work;
-        this.sec = 0;
+        this.minutes = this.timer.mode ? this.timer.work || 30 : this.timer.rest;
+        this.seconds = 0;
         this.$timer = $('.timer__clock');
+        $setContext(this.$timer, this.minutes, this.seconds);
         this.store.subscribe(state => {
-            setTime(this.$timer, this.min, this.sec);
+            this.minutes = state.timer.mode ? state.timer.work : state.timer.rest;
+            $setContext(this.$timer, state.timer.work, this.seconds);
         });
     }
 
-    start(min) {
-        if (min) {
-            this.min = min;
-        }
-        if (!this.work) {
-            this.work = setInterval(this.tick.bind(this), 1000);
+    start() {
+        if (!this.interval) {
+            this.interval = setInterval(this.tick.bind(this), 1000);
         }
     }
 
-    pause() {
-        if (!this.pauseStatus) {
-            this.stop();
-            this.pauseStatus = true;
-        } else {
+    update() {
+        if (!this.interval) {
             this.start();
-            this.pauseStatus = false;
+            this.updateButtonImg('pause');
+        } else {
+            this.stop();
+            this.updateButtonImg('play');
         }
+    }
+
+    updateButtonImg(path) {
+        $('[data-timer="update"]').find('img').imgPath = `./svg/${path}-solid.svg`;
     }
 
     stop() {
-        clearInterval(this.work);
-        this.work = null;
+        clearInterval(this.interval);
+        this.interval = null;
+    }
+
+    next(mode) {
+        return mode ? this.timer.work : this.timer.rest;
     }
 
     tick() {
-        if (!this.min && !this.sec) {
-            this.stop();
-            return;
+        if (!this.minutes && !this.seconds) {
+            this.store.dispatch(
+                timerMode(
+                    {mode: !this.timer.mode}
+                )
+            );
+            this.minutes = this.next(this.timer.mode);
         }
-        if (this.sec == 0) {
-            this.min--;
-            this.sec = 9;
-            setTime(this.$timer, this.min, this.sec);
-            this.$dispatch(
-                timerMinutes(
-                    {timer: {min: this.min}}
+        if (this.seconds == 0) {
+            this.minutes--;
+            this.seconds = 5;
+            $setContext(this.$timer, this.minutes, this.seconds);
+            let timerTimeUpdate = this.timer.mode ? {
+                    work: this.minutes,
+                    rest: this.timer.rest
+                } : {
+                    work: this.timer.work,
+                    rest: this.minutes
+                };
+            this.store.dispatch(
+                timerTime(
+                    timerTimeUpdate
                 )
             );
         } else {
-            this.sec--;
-            setTime(this.$timer, this.min, this.sec);
+            this.seconds--;
+            $setContext(this.$timer, this.minutes, this.seconds);
         }
     }
 }

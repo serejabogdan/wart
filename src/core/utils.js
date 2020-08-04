@@ -2,7 +2,6 @@ export function capitalize(str) {
     if (typeof str != 'string') {
         return '';
     }
-
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -13,18 +12,14 @@ export function storage(key = 'wart-state', data = null) {
     localStorage.setItem(key, JSON.stringify(data));
 }
 
-export function fixTime(min, sec) {
-    return `${fixMinutes(min)}:${fixSeconds(sec)}`;
+function fixTime(minutes, seconds) {
+    return `${fixUnitOfTime(minutes)}:${fixUnitOfTime(seconds)}`;
 }
 
-function fixMinutes(min) {
-    return min < 10 ? `0${min}` : `${min}`;
+function fixUnitOfTime(unit) {
+    return unit < 10 ? `0${unit}` : `${unit}`;
 }
 
-function fixSeconds(sec) {
-    return sec < 10 ? `0${sec}` : `${sec}`;
-}
-
-export function setTime($timer, min, sec) {
-    $timer.change = fixTime(min, sec);
+export function $setContext($context, minutes, seconds) {
+    $context.change = fixTime(minutes, seconds);
 }
