@@ -10,15 +10,15 @@ export class Timer extends WartComponent {
             listeners: ['click'],
             ...options
         });
-        this.timer = new TimerService(options.store);
+        this.timer = new TimerService($selector, options.store);
         this.controls = [];
     }
 
     toHTML() {
         return `
             <div class="timer">
-                <div class="timer__status" data-timer="status">
-                    <span></span>
+                <div class="timer__status">
+                    <span data-timer="status"></span>
                 </div>
                 <div class="timer__clock" data-timer="timer">
                     00:00

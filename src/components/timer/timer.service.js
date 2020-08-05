@@ -1,27 +1,38 @@
-import {$} from '@core/dom';
-import {timerTime, timerMode, timerUpdate} from '@core/redux/actions';
+import {timerTime, timerUpdate} from '@core/redux/actions';
 import {$setContext} from '@core/utils';
 
 export class TimerService {
-    constructor(store) {
+    constructor($root, store) {
         this.minutes = this.seconds = 0;
         this.store = store;
+        this.$root = $root;
         this.timer = this.store.getState().timer;
         this.audio = new Audio('./audio/alarm1.mp3');
     }
     
     timerInit() {
-        this.minutes = this.timer.mode ? this.timer.work || 30 : this.timer.rest;
-        this.seconds = 0;
-        this.audio.volume = 0.2;
-        this.$timer = $('.timer__clock');
-        this.$status = $('.timer__status').find('span');
-        this.$status.change = this.timer.mode ? 'work' : 'rest';
+        this.timerHtmlInit();
+        this.timerContextUpdate(this.store.getState());
         $setContext(this.$timer, this.minutes, this.seconds);
+        this.audio.volume = 0.1;
+
         this.store.subscribe(state => {
-            this.minutes = state.timer.mode ? state.timer.work : state.timer.rest;
-            $setContext(this.$timer, state.timer.work, this.seconds);
+            this.timerContextUpdate(state);
+            this.minutes--;
+            this.seconds = 59;
+            $setContext(this.$timer, this.minutes, this.seconds);
         });
+    }
+
+    timerContextUpdate(state) {
+        this.minutes = state.timer.mode ? state.timer.work : state.timer.rest;
+        this.$status.change = this.timer.mode ? 'work' : 'rest';
+    }
+
+    timerHtmlInit() {
+        this.$timer = this.$root.find('[data-timer="timer"]');
+        this.$status = this.$root.find('[data-timer="status"]');
+        this.$buttonUpdateImage = this.$root.find('[data-timer="image-btn"]');
     }
 
     start() {
@@ -41,7 +52,7 @@ export class TimerService {
     }
 
     updateButtonImg(path) {
-        $('[data-timer="update"]').find('img').imgPath = `./svg/${path}-solid.svg`;
+        this.$buttonUpdateImage.imgPath = `./svg/${path}-solid.svg`;
     }
 
     stop() {
@@ -49,42 +60,20 @@ export class TimerService {
         this.interval = null;
     }
 
-    next(mode) {
-        if (mode) {
-            this.store.dispatch(timerTime({
+    nextMode() {
+        this.store.dispatch(
+            timerUpdate({
                 work: this.timer.fullWork,
-                rest: this.timer.fullRest
-            }));
-            this.$status.change = 'work';
-            return this.timer.work;
-        } else {
-            this.$status.change = 'rest';
-            return this.timer.rest;
-        }
+                rest: this.timer.fullRest,
+                mode: !this.timer.mode
+            })
+        );
+        this.$status.change = this.timer.mode ? 'work' : 'rest';
     }
 
     tick() {
-        if (this.minutes < 0)
-            return;
-
-        if (!this.minutes && !this.seconds) {
-            this.store.dispatch(
-                timerMode(
-                    {mode: !this.timer.mode}
-                )
-            );
-            this.minutes = this.next(this.timer.mode);
-            this.audio.play();
-            if (this.minutes <= 0) {
-                this.stop();
-                return;
-            }
-        }
-        if (this.seconds == 0) {
-            this.minutes--;
-            this.seconds = 59;
-            $setContext(this.$timer, this.minutes, this.seconds);
-            let timerTimeUpdate = this.timer.mode ? {
+        if (this.minutes >= 0 && this.seconds == 0) {
+            let timeUpdate = this.timer.mode ? {
                     work: this.minutes,
                     rest: this.timer.rest
                 } : {
@@ -93,12 +82,16 @@ export class TimerService {
                 };
             this.store.dispatch(
                 timerTime(
-                    timerTimeUpdate
+                    timeUpdate
                 )
             );
         } else {
             this.seconds--;
             $setContext(this.$timer, this.minutes, this.seconds);
+        }
+        if (!this.minutes && !this.seconds) {
+            this.nextMode();
+            this.audio.play();
         }
     }
 }

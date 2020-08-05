@@ -42,7 +42,7 @@ export class Settings extends WartComponent {
                 $modal.addClass('open');
             },
             ok() {
-                const controls = $('.wart-modal__body').findAll('[data-input]');
+                const controls = $modal.findAll('[data-input]');
                 const timer = {};
                 for(let control of controls) {
                     timer[control.dataset.input] = +control.value;
