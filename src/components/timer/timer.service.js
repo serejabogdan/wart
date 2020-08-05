@@ -82,7 +82,7 @@ export class TimerService {
         }
         if (this.seconds == 0) {
             this.minutes--;
-            this.seconds = 5;
+            this.seconds = 59;
             $setContext(this.$timer, this.minutes, this.seconds);
             let timerTimeUpdate = this.timer.mode ? {
                     work: this.minutes,
