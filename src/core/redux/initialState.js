@@ -4,7 +4,9 @@ const defaultState = {
     timer: {
         work: 30,
         rest: 5,
-        mode: true
+        mode: true,
+        fullWork: 30,
+        fullRest: 5
     }
 };
 
