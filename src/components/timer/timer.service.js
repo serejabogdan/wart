@@ -1,5 +1,5 @@
 import {$} from '@core/dom';
-import {timerTime, timerMode} from '@core/redux/actions';
+import {timerTime, timerMode, timerUpdate} from '@core/redux/actions';
 import {$setContext} from '@core/utils';
 
 export class TimerService {
@@ -46,10 +46,21 @@ export class TimerService {
     }
 
     next(mode) {
-        return mode ? this.timer.work : this.timer.rest;
+        if (mode) {
+            this.store.dispatch(timerTime({
+                work: this.timer.fullWork,
+                rest: this.timer.fullRest
+            }));
+            return this.timer.work;
+        } else {
+            return this.timer.rest;
+        }
     }
 
     tick() {
+        if (this.minutes < 0)
+            return;
+
         if (!this.minutes && !this.seconds) {
             this.store.dispatch(
                 timerMode(
@@ -57,6 +68,10 @@ export class TimerService {
                 )
             );
             this.minutes = this.next(this.timer.mode);
+            if (this.minutes <= 0) {
+                this.stop();
+                return;
+            }
         }
         if (this.seconds == 0) {
             this.minutes--;

@@ -2,8 +2,8 @@ import {storage} from '@core/utils';
 
 const defaultState = {
     timer: {
-        work: 0,
-        rest: 0,
+        work: 30,
+        rest: 5,
         mode: true
     }
 };

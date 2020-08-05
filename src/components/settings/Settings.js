@@ -2,7 +2,7 @@ import {WartComponent} from '@core/WartComponent';
 import {modalWindow} from './settings.modal';
 import {$} from '@core/dom';
 import {Control} from '@core/Control';
-import {timerTime, timerMode} from '@core/redux/actions';
+import {timerUpdate} from '@core/redux/actions';
 
 export class Settings extends WartComponent {
     constructor($selector, options = {}) {
@@ -47,8 +47,8 @@ export class Settings extends WartComponent {
                 for(let control of controls) {
                     timer[control.dataset.input] = +control.value;
                 }
-                $dispatch(timerTime(timer));
-                $dispatch(timerMode({mode: true}));
+                timer.mode = true;
+                $dispatch(timerUpdate(timer));
                 this.close();
             },
             close() {

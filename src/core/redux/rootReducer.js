@@ -1,7 +1,8 @@
 import {
     AMOUNT_MINUTES,
     TIMER_TIME,
-    TIMER_MODE
+    TIMER_MODE,
+    TIMER_UPDATE
 } from './type';
 
 export function rootReducer(state, action) {
@@ -10,6 +11,12 @@ export function rootReducer(state, action) {
         case AMOUNT_MINUTES:
             prevState = state.timer || {};
             prevState.min = action.timer.min;
+            return {...state, timer: prevState};
+        case TIMER_UPDATE:
+            prevState = state.timer || {};
+            prevState.fullWork = prevState.work = action.timer.work;
+            prevState.fullRest = prevState.rest = action.timer.rest;
+            prevState.mode = action.timer.mode;
             return {...state, timer: prevState};
         case TIMER_TIME:
             prevState = state.timer || {};
