@@ -42,6 +42,14 @@
     }
 }
 
+.timer__status {
+    display: flex;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    font-family: sans-serif;
+}
+
 $screen-sm: 576px;
 $screen-md: 768px;
 $screen-lg: 992px;

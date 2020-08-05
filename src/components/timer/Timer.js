@@ -17,6 +17,9 @@ export class Timer extends WartComponent {
     toHTML() {
         return `
             <div class="timer">
+                <div class="timer__status" data-timer="status">
+                    <span></span>
+                </div>
                 <div class="timer__clock" data-timer="timer">
                     00:00
                 </div>

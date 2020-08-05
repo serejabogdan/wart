@@ -7,12 +7,16 @@ export class TimerService {
         this.minutes = this.seconds = 0;
         this.store = store;
         this.timer = this.store.getState().timer;
+        this.audio = new Audio('./audio/alarm1.mp3');
     }
     
     timerInit() {
         this.minutes = this.timer.mode ? this.timer.work || 30 : this.timer.rest;
         this.seconds = 0;
+        this.audio.volume = 0.2;
         this.$timer = $('.timer__clock');
+        this.$status = $('.timer__status').find('span');
+        this.$status.change = this.timer.mode ? 'work' : 'rest';
         $setContext(this.$timer, this.minutes, this.seconds);
         this.store.subscribe(state => {
             this.minutes = state.timer.mode ? state.timer.work : state.timer.rest;
@@ -51,8 +55,10 @@ export class TimerService {
                 work: this.timer.fullWork,
                 rest: this.timer.fullRest
             }));
+            this.$status.change = 'work';
             return this.timer.work;
         } else {
+            this.$status.change = 'rest';
             return this.timer.rest;
         }
     }
@@ -68,6 +74,7 @@ export class TimerService {
                 )
             );
             this.minutes = this.next(this.timer.mode);
+            this.audio.play();
             if (this.minutes <= 0) {
                 this.stop();
                 return;
