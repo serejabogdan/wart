@@ -21,10 +21,12 @@ export function modalWindow(options) {
                         <p>Rest time</p>
                         <input type="text" data-input="rest">
                     </div>
+                    <!--
                     <div class="wart-modal__notification">
                         <p>Notifications</p>
                         <input type="text" data-input1="notifications">
                     </div>
+                    -->
                 </div>
                 <div class="wart-modal__footer">
                     <button class="btn btn-primary"

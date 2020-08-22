@@ -18,14 +18,18 @@ export class TimerService {
 
         this.store.subscribe(state => {
             this.timerContextUpdate(state);
-            this.minutes--;
-            this.seconds = 59;
+            if (this.interval) {
+                this.minutes--;
+                this.seconds = 59;
+            } else {
+                this.seconds = 0;
+            }
             $setContext(this.$timer, this.minutes, this.seconds);
         });
     }
 
     timerContextUpdate(state) {
-        this.minutes = state.timer.mode ? state.timer.work : state.timer.rest;
+        this.minutes = state.timer.mode ? state.timer.work || 30 : state.timer.rest || 5;
         this.$status.change = this.timer.mode ? 'work' : 'rest';
     }
 
@@ -72,8 +76,8 @@ export class TimerService {
     }
 
     tick() {
-        if (this.minutes >= 0 && this.seconds == 0) {
-            let timeUpdate = this.timer.mode ? {
+        if (this.minutes >= 0 && !this.seconds) {
+            const timeUpdate = this.timer.mode ? {
                     work: this.minutes,
                     rest: this.timer.rest
                 } : {
@@ -89,6 +93,7 @@ export class TimerService {
             this.seconds--;
             $setContext(this.$timer, this.minutes, this.seconds);
         }
+
         if (!this.minutes && !this.seconds) {
             this.nextMode();
             this.audio.play();

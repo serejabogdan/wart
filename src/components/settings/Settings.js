@@ -8,11 +8,12 @@ export class Settings extends WartComponent {
     constructor($selector, options = {}) {
         super($selector, {
             name: 'Settings',
-            listeners: ['click'],
+            listeners: ['mousedown', 'mouseup'],
             ...options
         });
         this.controls = [];
         this.$selector = $selector;
+        Settings.onmousedown = '';
     }
 
     toHTML() {
@@ -59,14 +60,17 @@ export class Settings extends WartComponent {
             destroy() {}
         };
     }
+    
+    onMousedown(e) {
+        Settings.onmousedown = e.target.dataset.input;
+    }
 
-    onClick(e) {
-        const typeBtn = e.target.dataset.btn;
-        this.controls
-            .filter((control) => control.name === typeBtn)
-            .forEach((control) => {
-                control.action();
-            });
+    onMouseup(e) {
+        if (Settings.onmousedown == e.target.dataset.input) {
+            this.controls
+                .filter((control) => control.name === e.target.dataset.btn)
+                .forEach((control) => control.action());
+        }
     }
 }
 Settings.className = 'settings';
