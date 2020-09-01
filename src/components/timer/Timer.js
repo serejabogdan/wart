@@ -37,9 +37,9 @@ export class Timer extends WartComponent {
     }
 
     onClick(e) {
-        const typeBtn = e.target.dataset.timer;
+        const eventName = e.target.dataset.timer;
         this.controls
-            .filter(control => control.name == typeBtn)
+            .filter(control => control.name == eventName)
             .forEach(control => control.action());
     }
 }

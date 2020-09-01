@@ -6,8 +6,8 @@ class Dom {
                 : selector;
     }
 
-    set change(text) {
-        this.$selector.innerHTML = text;
+    set changeText(text) {
+        this.$selector.textContent = text;
     }
 
     get selector() {
@@ -23,7 +23,7 @@ class Dom {
     }
 
     clear() {
-        this.$selector.innerHTML = '';
+        this.html('');
         return this;
     }
 

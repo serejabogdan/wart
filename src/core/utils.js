@@ -20,6 +20,6 @@ function fixUnitOfTime(unit) {
     return unit < 10 ? `0${unit}` : `${unit}`;
 }
 
-export function $setContext($context, minutes, seconds) {
-    $context.change = fixTime(minutes, seconds);
+export function $setTime($selector, minutes, seconds) {
+    $selector.changeText = fixTime(minutes, seconds);
 }

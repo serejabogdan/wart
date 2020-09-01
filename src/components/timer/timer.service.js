@@ -1,6 +1,7 @@
 import {timerTime, timerUpdate} from '@core/redux/actions';
-import {$setContext} from '@core/utils';
+import {$setTime} from '@core/utils';
 
+TimerService
 export class TimerService {
     constructor($root, store) {
         this.minutes = this.seconds = 0;
@@ -13,7 +14,7 @@ export class TimerService {
     timerInit() {
         this.timerHtmlInit();
         this.timerContextUpdate(this.store.getState());
-        $setContext(this.$timer, this.minutes, this.seconds);
+        $setTime(this.$timer, this.minutes, this.seconds);
         this.audio.volume = 0.1;
 
         this.store.subscribe(state => {
@@ -24,13 +25,17 @@ export class TimerService {
             } else {
                 this.seconds = 0;
             }
-            $setContext(this.$timer, this.minutes, this.seconds);
+            $setTime(this.$timer, this.minutes, this.seconds);
         });
     }
 
     timerContextUpdate(state) {
-        this.minutes = state.timer.mode ? state.timer.work || 30 : state.timer.rest || 5;
-        this.$status.change = this.timer.mode ? 'work' : 'rest';
+        const startWorkDefaultTime = 30;
+        const startRestDefaultTime = 5;
+        this.minutes = state.timer.mode ?
+            state.timer.work || startWorkDefaultTime
+            : state.timer.rest || startRestDefaultTime;
+        this.statusToggle();
     }
 
     timerHtmlInit() {
@@ -72,7 +77,7 @@ export class TimerService {
                 mode: !this.timer.mode
             })
         );
-        this.$status.change = this.timer.mode ? 'work' : 'rest';
+        this.statusToggle();
     }
 
     tick() {
@@ -91,12 +96,16 @@ export class TimerService {
             );
         } else {
             this.seconds--;
-            $setContext(this.$timer, this.minutes, this.seconds);
+            $setTime(this.$timer, this.minutes, this.seconds);
         }
 
         if (!this.minutes && !this.seconds) {
             this.nextMode();
             this.audio.play();
         }
+    }
+
+    statusToggle() {
+        this.$status.changeText = this.timer.mode ? 'work' : 'rest';
     }
 }
