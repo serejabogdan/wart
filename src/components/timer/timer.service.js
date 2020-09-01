@@ -1,5 +1,5 @@
 import {timerTime, timerUpdate} from '@core/redux/actions';
-import {$setTime} from '@core/utils';
+import {fixTime} from '@core/utils';
 
 TimerService
 export class TimerService {
@@ -14,19 +14,25 @@ export class TimerService {
     timerInit() {
         this.timerHtmlInit();
         this.timerContextUpdate(this.store.getState());
-        $setTime(this.$timer, this.minutes, this.seconds);
+        this.$setTime();
         this.audio.volume = 0.1;
 
+        const maxSeconds = 59;
+        const minSeconds = 0;
         this.store.subscribe(state => {
             this.timerContextUpdate(state);
             if (this.interval) {
                 this.minutes--;
-                this.seconds = 59;
+                this.seconds = maxSeconds;
             } else {
-                this.seconds = 0;
+                this.seconds = minSeconds;
             }
-            $setTime(this.$timer, this.minutes, this.seconds);
+            this.$setTime();
         });
+    }
+
+    $setTime() {
+        this.$timer.changeText = fixTime(this.minutes, this.seconds);
     }
 
     timerContextUpdate(state) {
@@ -96,7 +102,7 @@ export class TimerService {
             );
         } else {
             this.seconds--;
-            $setTime(this.$timer, this.minutes, this.seconds);
+            this.$setTime();
         }
 
         if (!this.minutes && !this.seconds) {

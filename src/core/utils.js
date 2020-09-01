@@ -12,14 +12,10 @@ export function storage(key = 'wart-state', data = null) {
     localStorage.setItem(key, JSON.stringify(data));
 }
 
-function fixTime(minutes, seconds) {
+export function fixTime(minutes, seconds) {
     return `${fixUnitOfTime(minutes)}:${fixUnitOfTime(seconds)}`;
 }
 
 function fixUnitOfTime(unit) {
     return unit < 10 ? `0${unit}` : `${unit}`;
-}
-
-export function $setTime($selector, minutes, seconds) {
-    $selector.changeText = fixTime(minutes, seconds);
 }
