@@ -16,8 +16,8 @@ export class WartComponent extends DomListener {
     }
 
     /* Observer */
-    $emit(e, ...args) {
-        this.observer.emit(e, ...args);
+    $emit(eventName, ...args) {
+        this.observer.emit(eventName, ...args);
     }
 
     $on(e, callback) {
@@ -33,6 +33,10 @@ export class WartComponent extends DomListener {
 
     $subscribe(callback) {
         this.storeSub = this.store.subscribe(callback);
+    }
+
+    $getState() {
+        return this.store.getState();
     }
     /* Store */
 

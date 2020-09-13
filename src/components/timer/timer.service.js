@@ -12,7 +12,7 @@ export class TimerService {
     }
     
     timerInit() {
-        this.timerHtmlInit();
+        this.timerHtmlFounded();
         this.timerContextUpdate(this.store.getState());
         this.$setTime();
         this.audio.volume = 0.1;
@@ -36,15 +36,13 @@ export class TimerService {
     }
 
     timerContextUpdate(state) {
-        const startWorkDefaultTime = 30;
-        const startRestDefaultTime = 5;
         this.minutes = state.timer.mode ?
-            state.timer.work || startWorkDefaultTime
-            : state.timer.rest || startRestDefaultTime;
+            state.timer.work
+            : state.timer.rest;
         this.statusToggle();
     }
 
-    timerHtmlInit() {
+    timerHtmlFounded() {
         this.$timer = this.$root.find('[data-timer="timer"]');
         this.$status = this.$root.find('[data-timer="status"]');
         this.$buttonUpdateImage = this.$root.find('[data-timer="image-btn"]');

@@ -2,13 +2,13 @@ import {WartComponent} from '@core/WartComponent';
 import {modalWindow} from './settings.modal';
 import {$} from '@core/dom';
 import {Control} from '@core/Control';
-import {timerUpdate} from '@core/redux/actions';
+import {timerUpdate, audioRange} from '@core/redux/actions';
 
 export class Settings extends WartComponent {
     constructor($selector, options = {}) {
         super($selector, {
             name: 'Settings',
-            listeners: ['mousedown', 'mouseup'],
+            listeners: ['mousedown', 'mouseup', 'change'],
             ...options
         });
         this.controls = [];
@@ -26,12 +26,20 @@ export class Settings extends WartComponent {
 
     init() {
         super.init();
-        this.modal = this.createModal(this.$dispatch.bind(this), {title: 'Settings'});
+        this.modal = this.createModal(this.$dispatch.bind(this), {title: 'Settings', state: this.$getState()});
+        this.$modal = this.modal.getModal();
+        // array of controls
         this.controls = [
             new Control('settings', this.modal.open.bind(this.modal)),
             new Control('modal-close', this.modal.close.bind(this.modal)),
             new Control('modal-ok', this.modal.ok.bind(this.modal))
         ];
+        this.initFoundedHtml();
+    }
+
+    initFoundedHtml() {
+        this.audioRangeStatus = this.$modal.find('[data-input="audio"]');
+        this.audioRangeStatus.value = 11;
     }
 
     createModal($dispatch, options) {
@@ -57,10 +65,14 @@ export class Settings extends WartComponent {
                 $modal.addClass('hide');
                 setTimeout(() => $modal.removeClass('hide'), 300);
             },
+            getModal() {
+                return $modal;
+            },
             destroy() {}
         };
     }
-    
+
+    // events
     onMousedown(e) {
         Settings.onmousedown = e.target.dataset.input;
     }
@@ -70,6 +82,14 @@ export class Settings extends WartComponent {
             this.controls
                 .filter((control) => control.name === e.target.dataset.btn)
                 .forEach((control) => control.action());
+        }
+    }
+
+    onChange(e) {
+        if(e.target.dataset.input == 'audio') {
+            this.$dispatch(
+                audioRange({range: +e.target.value})
+            );
         }
     }
 }

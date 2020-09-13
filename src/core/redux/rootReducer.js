@@ -2,7 +2,8 @@ import {
     AMOUNT_MINUTES,
     TIMER_TIME,
     TIMER_MODE,
-    TIMER_UPDATE
+    TIMER_UPDATE,
+    AUDIO_RANGE
 } from './type';
 
 export function rootReducer(state, action) {
@@ -27,6 +28,10 @@ export function rootReducer(state, action) {
             prevState = state.timer || {};
             prevState.mode = action.timer.mode;
             return {...state, timer: prevState};
+        case AUDIO_RANGE:
+            prevState = state.audio || {};
+            prevState.range = action.audio.range;
+            return {...state, audio: prevState};
         default: return state;
     }
 }

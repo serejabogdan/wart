@@ -7,6 +7,9 @@ const defaultState = {
         mode: true,
         fullWork: 30,
         fullRest: 5
+    },
+    audio: {
+        range: 20
     }
 };
 
