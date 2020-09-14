@@ -1,7 +1,6 @@
 import {timerTime, timerUpdate} from '@core/redux/actions';
 import {fixTime} from '@core/utils';
 
-TimerService
 export class TimerService {
     constructor($root, store) {
         this.minutes = this.seconds = 0;

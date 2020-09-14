@@ -29,8 +29,8 @@ export function modalWindow(options) {
                     -->
                     <div class="wart-modal__audio-range">
                         <p>Audio range</p>
-                        <input type="range" data-input="audio" value=${options.state.audio.range || 20}>
-                        ${options.state.audio.range || 20}%
+                        <input type="range" data-audio="range" value=${options.state.audio.range || 20}>
+                        <span data-status="range">${options.state.audio.range || 20}</span>%
                     </div>
                 </div>
                 <div class="wart-modal__footer">

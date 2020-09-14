@@ -26,7 +26,7 @@ export class Settings extends WartComponent {
 
     init() {
         super.init();
-        this.modal = this.createModal(this.$dispatch.bind(this), {title: 'Settings', state: this.$getState()});
+        this.modal = this.createModal(this.getDataFromSettings.bind(this), {title: 'Settings', state: this.$getState()});
         this.$modal = this.modal.getModal();
         // array of controls
         this.controls = [
@@ -35,14 +35,18 @@ export class Settings extends WartComponent {
             new Control('modal-ok', this.modal.ok.bind(this.modal))
         ];
         this.initFoundedHtml();
+        this.storeSubscribes();
     }
 
     initFoundedHtml() {
-        this.audioRangeStatus = this.$modal.find('[data-input="audio"]');
-        this.audioRangeStatus.value = 11;
+        this.audioRangeStatus = this.$modal.find('[data-status="range"]');
     }
 
-    createModal($dispatch, options) {
+    storeSubscribes() {
+        this.$subscribe(({audio}) => this.audioRangeStatus.changeText = audio.range);
+    }
+
+    createModal(getDataFromSettings, options) {
         const $modal = $.create('div', 'wart-modal');
         $modal.html(modalWindow(options));
         this.$selector.append($modal);
@@ -51,13 +55,9 @@ export class Settings extends WartComponent {
                 $modal.addClass('open');
             },
             ok() {
-                const controls = $modal.findAll('[data-input]');
-                const timer = {};
-                for(let control of controls) {
-                    timer[control.dataset.input] = +control.value;
-                }
-                timer.mode = true;
-                $dispatch(timerUpdate(timer));
+                getDataFromSettings('[data-input]', 'input', $modal, timerUpdate, {mode: true});
+                getDataFromSettings('[data-audio]', 'audio', $modal, audioRange);
+
                 this.close();
             },
             close() {
@@ -70,6 +70,18 @@ export class Settings extends WartComponent {
             },
             destroy() {}
         };
+    }
+
+    getDataFromSettings(searchable, key, $modal, typeDispatch, options = {}) {
+        const controls = $modal.findAll(searchable);
+        let obj = {};
+        for(let control of controls) {
+            obj[control.dataset[key]] = +control.value;
+        }
+        console.log(obj);
+        obj = {...obj, ...options};
+        console.log(obj);
+        this.$dispatch(typeDispatch(obj));
     }
 
     // events
@@ -86,11 +98,11 @@ export class Settings extends WartComponent {
     }
 
     onChange(e) {
-        if(e.target.dataset.input == 'audio') {
+        /* if(e.target.dataset.input == 'audio') {
             this.$dispatch(
                 audioRange({range: +e.target.value})
             );
-        }
+        } */
     }
 }
 Settings.className = 'settings';
